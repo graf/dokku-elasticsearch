@@ -59,12 +59,12 @@ service_create_container() {
   ID=$(docker run --name "$SERVICE_NAME" -v "$SERVICE_HOST_ROOT/data:/usr/share/elasticsearch/data" -v "$SERVICE_HOST_ROOT/config:/usr/share/elasticsearch/config" --env-file="$SERVICE_ROOT/ENV" -d --restart always --label dokku=service --label dokku.service=elasticsearch "$PLUGIN_IMAGE:$PLUGIN_IMAGE_VERSION")
   echo "$ID" > "$SERVICE_ROOT/ID"
 
-  dokku_log_info2 "Copying config files into place"
-  retry-docker-command "$ID" "cp -arfp --no-clobber /etc/elasticsearch/. /usr/share/elasticsearch/config/"
-  retry-docker-command "$ID" "echo 'network.host: 0.0.0.0' >> /usr/share/elasticsearch/config/elasticsearch.yml"
-  retry-docker-command "$ID" "rm -rf /etc/elasticsearch && ln -sfn /usr/share/elasticsearch/config /etc/elasticsearch"
-  retry-docker-command "$ID" "chown -R root:elasticsearch /etc/elasticsearch"
-  docker restart "$ID" > /dev/null
+#  dokku_log_info2 "Copying config files into place"
+#  retry-docker-command "$ID" "cp -arfp --no-clobber /etc/elasticsearch/. /usr/share/elasticsearch/config/"
+#  retry-docker-command "$ID" "echo 'network.host: 0.0.0.0' >> /usr/share/elasticsearch/config/elasticsearch.yml"
+#  retry-docker-command "$ID" "rm -rf /etc/elasticsearch && ln -sfn /usr/share/elasticsearch/config /etc/elasticsearch"
+#  retry-docker-command "$ID" "chown -R root:elasticsearch /etc/elasticsearch"
+#  docker restart "$ID" > /dev/null
 
   dokku_log_verbose_quiet "Waiting for container to be ready"
   docker run --rm --link "$SERVICE_NAME:$PLUGIN_COMMAND_PREFIX" dokkupaas/wait:0.2 -p "$PLUGIN_DATASTORE_WAIT_PORT" > /dev/null
